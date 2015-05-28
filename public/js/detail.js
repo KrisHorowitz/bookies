@@ -40,26 +40,34 @@ function init() {
   ///////////
   //Create a light, set its position, and add it to the scene.
   // var light = new THREE.PointLight(0xffffff);
-  // light.position.set(-100,200,100);
+  // light.position.set(4,3,3);
   // scene.add(light);
 
   var ambientLight = new THREE.AmbientLight( 0xC6C6C6);
   scene.add(ambientLight);
 
-  //rectangle
+  //////////
+  // BOOK //
+  //////////
   var bookMaterialArray = [];
   // order to add materials: x+,x-,y+,y-,z+,z-
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xB57533 } ) ); //spine
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) ); // front of book
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) ); //top
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) ); // bottom
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js-back.jpg' ) }) ); //back
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js.jpg' ) }) ); //cover
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xB57533 } ) );
+  // spine (x+)
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+  // opposite of spine (pages) (x-)
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+  // top (y+)
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+  // bottom (y-)
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js-back.jpg' ) }) );
+  // back (z+)
+  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js.jpg' ) }) );
+  // cover (z-)
 
-  var geometry = new THREE.BoxGeometry(2, 2.5, .5);
+  var bookGeometry = new THREE.BoxGeometry(2, 2.5, .5);
   // var material = new THREE.MeshBasicMaterial({color: 0xB57533});
-  var material = new THREE.MeshFaceMaterial( bookMaterialArray );
-  var book = new THREE.Mesh(geometry, material);
+  var bookMaterial = new THREE.MeshFaceMaterial( bookMaterialArray );
+  var book = new THREE.Mesh(bookGeometry, bookMaterial);
 
   var loader = new THREE.Loader();
   loader.createMaterial(book);
@@ -82,7 +90,10 @@ function init() {
   // loader.createMaterial(rectMesh)
   // scene.add(rectMesh)
 
-  //Add OrbitControls so that we can pan around with the mouse.
+  //////////////
+  // CONTROLS //
+  //////////////
+
   controls = new THREE.OrbitControls(camera, renderer.domELement);
 }
 

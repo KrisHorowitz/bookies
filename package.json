@@ -1,10 +1,10 @@
 {
   "name": "bookies",
   "version": "1.0.0",
-  "dependencies" :
-    {
-      "express" : "~4.0.0",
-      "mysql" : "*",
-      "ejs": "~1.0.0"
-    }
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "ejs": "~1.0.0",
+    "express": "~4.0.0",
+    "mysql": "*"
+  }
 }
