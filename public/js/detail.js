@@ -20,7 +20,7 @@ function init() {
   //Create a camera, zoom it out from the model a bit, and add it to the scene,
   camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
   // angle, aspect, near, draw distance
-  camera.position.set(5,3,-3); // set XYZ coordinate of camera
+  camera.position.set(12,8,-14); // set XYZ coordinate of camera
   scene.add(camera);
 
   //Create an event listener that resizes the renderer with the browser window.
@@ -64,7 +64,7 @@ function init() {
   bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js.jpg' ) }) );
   // cover (z-)
 
-  var bookGeometry = new THREE.BoxGeometry(2, 2.5, .5);
+  var bookGeometry = new THREE.BoxGeometry(7.5, 9.2, 0.3);
   // var material = new THREE.MeshBasicMaterial({color: 0xB57533});
   var bookMaterial = new THREE.MeshFaceMaterial( bookMaterialArray );
   var book = new THREE.Mesh(bookGeometry, bookMaterial);
@@ -95,6 +95,8 @@ function init() {
   //////////////
 
   controls = new THREE.OrbitControls(camera, renderer.domELement);
+  controls.minDistance = 5;
+  controls.maxDistance = 30;
 }
 
 function animate() {
