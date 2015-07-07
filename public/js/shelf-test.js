@@ -1,14 +1,88 @@
-
-/*globals THREE, $*/
+/*globals THREE, $, colorThief*/
 
 // Set up the scene, camera, and renderer as global variables.
 var scene, camera, renderer, controls;
+var colorThief = new ColorThief();
+var n = 23;
 
-init();
+  init();
+
+  $(window).load(
+    function(){
+      $.get('user/1/shelf', function(data){
+            $.get('shelf/1/book', function(data) {
+                renderBooks(data);
+            });
+        }
+      );
+    }
+  );
+
+  function increment(){
+    if (n >= -21) {
+      n = n - 3;
+      return n;
+    } else {
+      window.alert('Oops! Looks like there\'s no more room on your shelf.' );
+    }
+
+  }
+
+  function renderBooks(books) {
+      for(var i=0; i<books.length; i++) {
+        //////////
+        // BOOK //
+        //////////
+        var book = books[i],
+          coverImg = book.cover_img,
+          backImg = book.back_img;
+        console.log(i);
+
+        var bookGeometry = new THREE.BoxGeometry( book.length, book.height, book.width );
+
+        var bookMaterialArray = [];
+
+        var img = document.createElement('IMG');
+        img.onload = function(){
+          // order to add materials: x+,x-,y+,y-,z+,z-
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: "rgb("+colorThief.getColor(img).join(',') + ")" } ) );
+          // spine (x+)
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+          // opposite of spine (pages) (x-)
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+          // top (y+)
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+          // bottom (y-)
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title + '-back.jpg') }) );
+          // back (z+)
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title +'-cover.jpg') }) );
+          // cover (z-)
+
+          var bookMaterial = new THREE.MeshFaceMaterial( bookMaterialArray );
+          var bookMesh = new THREE.Mesh(bookGeometry, bookMaterial);
+
+          if (i===1) {
+            bookMesh.position.set(5, (book.height/2 + 0.5), n);
+          } else {
+            bookMesh.position.set(5,(book.height/2 + 0.5), increment(n));
+          }
+          // var loader = new THREE.Loader();
+          // loader.createMaterial(book);
+          scene.add(bookMesh);
+        };
+        img.src = 'images/books/'+book.title+'-cover.jpg';
+      }
+      animate();
+  }
+
+
+
 animate();
 
 //set up the scene
 function init() {
+
+
   //create the scene and set the scene size
   scene = new THREE.Scene();
   var WIDTH = window.innerWidth,
@@ -48,41 +122,11 @@ function init() {
   var ambientLight = new THREE.AmbientLight( 0xC6C6C6);
   scene.add(ambientLight);
 
-  //////////
-  // BOOK //
-  //////////
-  var bookMaterialArray = [];
-  // order to add materials: x+,x-,y+,y-,z+,z-
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xB57533 } ) );
-  // spine (x+)
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-  // opposite of spine (pages) (x-)
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-  // top (y+)
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-  // bottom (y-)
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js-back.jpg' ) }) );
-  // back (z+)
-  bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'images/3js.jpg' ) }) );
-  // cover (z-)
-
-  var bookGeometry = new THREE.BoxGeometry(7.5, 9.2, 0.3);
-  // var material = new THREE.MeshBasicMaterial({color: 0xB57533});
-  var bookMaterial = new THREE.MeshFaceMaterial( bookMaterialArray );
-  var book = new THREE.Mesh(bookGeometry, bookMaterial);
-  book.position.set(5,5,23);
-
-  // var loader = new THREE.Loader();
-  // loader.createMaterial(book);
-  scene.add(book);
-
   //////////////
   // ADD CUBE //
   //////////////
 
   var el = document.getElementById("addBook");
-
-  var n = 23;
 
   el.addEventListener("click", function() {addBook(increment(n));}, false);
 
@@ -105,42 +149,61 @@ function init() {
             var geometry = new THREE.BoxGeometry( book.length, book.height, book.width );
             //replace data.cover_img
             var meshMaterialArray = [];
-            // order to add materials: x+,x-,y+,y-,z+,z-
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xB57533 } ) );
-            // spine (x+)
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-            // opposite of spine (pages) (x-)
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-            // top (y+)
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
-            // bottom (y-)
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title + '-back.jpg') }) );
-            // back (z+)
-            meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title +'-cover.jpg')  }) );
-            // cover (z-)
-            var material = new THREE.MeshFaceMaterial( meshMaterialArray );
-             // var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
 
-            var mesh = new THREE.Mesh( geometry, material );
-            mesh.position.set(5,5,i);
-            //scene is global
-            scene.add(mesh);
+            var img = document.createElement('IMG');
+            img.onload =function() {
+                console.log('image loaded');
+                // order to add materials: x+,x-,y+,y-,z+,z-
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color:  "rgb("+colorThief.getColor(img).join(',') + ")" } ) );
+                // spine (x+)
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+                // opposite of spine (pages) (x-)
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+                // top (y+)
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
+                // bottom (y-)
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title + '-back.jpg') }) );
+                // back (z+)
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title +'-cover.jpg')  }) );
+                // cover (z-)
+                var material = new THREE.MeshFaceMaterial( meshMaterialArray );
+                 // var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+
+                var mesh = new THREE.Mesh( geometry, material );
+                mesh.position.set(5,(book.height/2 + 0.5),i);
+                //scene is global
+                scene.add(mesh);
+            };
+            img.src = 'images/books/' +book.title +'-cover.jpg';
           }
         });
     }
   }
 
+  ///////////
+  // SPINE //
+  ///////////
 
+    // create a canvas element
+  // var canvas1 = document.createElement('canvas');
+  // var context1 = canvas1.getContext('2d');
+  // context1.font = "Bold 40px Arial";
+  // context1.fillStyle = "rgba(255,0,0,0.95)";
+  //   context1.fillText('Hello, world!', 0, 50);
 
-  function increment(){
-    if (n >= -21) {
-      n = n - 3;
-      return n;
-    } else {
-      window.alert('Oops! Looks like there\'s no more room on your shelf.' );
-    }
+  // canvas contents will be used for a texture
+  // var texture1 = new THREE.Texture(canvas1)
+  // texture1.needsUpdate = true;
 
-  }
+  //   var material1 = new THREE.MeshBasicMaterial( {map: texture1, side:THREE.DoubleSide } );
+  //   material1.transparent = true;
+
+  //   var mesh1 = new THREE.Mesh(
+  //       new THREE.PlaneGeometry(canvas1.width, canvas1.height),
+  //       material1
+  //     );
+  // mesh1.position.set(0,50,0);
+  // scene.add( mesh1 );
 
   ///////////
   // SHELF //
@@ -191,8 +254,8 @@ function init() {
   //////////////
 
   var controls = new THREE.OrbitControls(camera, renderer.domELement);
-  // controls.minDistance = 5;
-  // controls.maxDistance = 30;
+  controls.minDistance = 5;
+  controls.maxDistance = 400;
 
   //limits vertical rotation
   controls.minPolarAngle = 0; // radians

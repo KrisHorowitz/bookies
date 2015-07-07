@@ -1,13 +1,10 @@
-var aws = require('../config');
-
-
 var util = require('util'),
     OperationHelper = require('apac').OperationHelper;
 
 var opHelper = new OperationHelper({
-    awsId:     aws.aws.id,
-    awsSecret: aws.aws.secret,
-    assocId:   aws.aws.assoc,
+    awsId:     process.env.AWS_ID,
+    awsSecret: process.env.AWS_SECRET,
+    assocId:   process.env.AWS_ASSOC,
     // xml2jsOptions: an extra, optional, parameter for if you want to pass additional options for the xml2js module. (see https://github.com/Leonidas-from-XIV/node-xml2js#options)
     version:   '2013-08-01'
     // your version of using product advertising api, default: 2013-08-01

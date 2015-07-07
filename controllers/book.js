@@ -122,34 +122,6 @@ module.exports = {
         cb();
       }
     ]);
-/*
-    Amazon.findBook(req.body.title, function(err, book) {
-
-      Book.sync().then(function () {
-        var bookObj = {
-          title : book.ItemLookupResponse.Items[0].Item[0].ItemAttributes[0].Title[0],
-          author : book.ItemLookupResponse.Items[0].Item[0].ItemAttributes[0].Author[0],
-          length : (book.ItemLookupResponse.Items[0].Item[0].ItemAttributes[0].ItemDimensions[0].Length[0]._/100),
-          width : (book.ItemLookupResponse.Items[0].Item[0].ItemAttributes[0].ItemDimensions[0].Width[0]._/100),
-          height : (book.ItemLookupResponse.Items[0].Item[0].ItemAttributes[0].ItemDimensions[0].Height[0]._/100),
-        .Items[0].Item[0].LargeImage[0].URL[0],
-          back_img: book.ItemLookupResponse.Items[0].Item[0].ImageSets[0].ImageSet[0].LargeImage[0].URL[0]
-        };
-
-
-          return Book.create(bookObj);
-        }).then(function(book) {
-          console.log('success!');
-
-          // fs.writeFileSync(book.title + '-back.jpg', book.back_img);
-            //success
-            res.json(book);
-        }, function(err) {
-            //failure
-            console.error(err);
-        });
-    });
-*/
   }
   , update: function(req, res) {
     var id = req.params.id;

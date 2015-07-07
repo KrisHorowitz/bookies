@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var config = require('./config');
+var dotenv = require('dotenv');
+dotenv.load();
 
 app.use(bodyParser.json());
 
