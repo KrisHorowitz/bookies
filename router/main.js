@@ -8,7 +8,8 @@ var controllers = {
   shelf: require('../controllers/shelf'),
   user: require('../controllers/user'),
   bookShelf: require('../controllers/bookShelf'),
-  amazon: require('../controllers/amazon')
+  amazon: require('../controllers/amazon'),
+  aws: require('../controllers/aws')
   //and so on....
 };
 
@@ -51,6 +52,7 @@ module.exports=function(app) {
 
   //amazon API
   app.get('/amazon', controllers.amazon.index);
+  app.get('/aws', controllers.aws.index);
 
   //CRUD + index
   /*

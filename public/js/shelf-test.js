@@ -53,9 +53,9 @@ var n = 23;
           // top (y+)
           bookMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
           // bottom (y-)
-          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title + '-back.jpg') }) );
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(book.back_img) }) );
           // back (z+)
-          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title +'-cover.jpg') }) );
+          bookMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture(book.cover_img) }) );
           // cover (z-)
 
           var bookMaterial = new THREE.MeshFaceMaterial( bookMaterialArray );
@@ -70,7 +70,7 @@ var n = 23;
           // loader.createMaterial(book);
           scene.add(bookMesh);
         };
-        img.src = 'images/books/'+book.title+'-cover.jpg';
+        img.src = book.cover_img;
       }
       animate();
   }
@@ -150,11 +150,46 @@ function init() {
             //replace data.cover_img
             var meshMaterialArray = [];
 
-            var img = document.createElement('IMG');
-            img.onload =function() {
+
+            var cover_canvas = document.createElement('canvas');
+
+            var cover_img = new Image();
+            cover_img.crossOrigin = '';
+            cover_img.onload = _onload;
+            cover_img.src = book.cover_img;
+
+            var back_img = new Image();
+            back_img.crossOrigin = '';
+            back_img.onload = _onload;
+            back_img.src = book.back_img;
+
+            var count = 0;
+            function _onload() {
+                count++;
+                if(count == 2) ready();
+            }
+
+            function ready() {
+
+                var cover_canvas = document.createElement('canvas');
+                var back_canvas  = document.createElement('canvas');
+                document.body.appendChild(cover_canvas);
+                cover_canvas.width  = cover_img.width;
+                cover_canvas.height = cover_img.height;
+                back_canvas.width   = back_img.width;
+                back_canvas.height  = back_img.height;
+
+                cover_canvas.getContext('2d').drawImage(cover_img, 0, 0);
+                back_canvas.getContext('2d').drawImage(back_img, 0, 0);
+
+                var cover_texture = new THREE.Texture(cover_canvas);
+                var back_texture  = new THREE.Texture(back_canvas);
+                cover_texture.needsUpdate = true;
+                back_texture.needsUpdate = true;
+
                 console.log('image loaded');
                 // order to add materials: x+,x-,y+,y-,z+,z-
-                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color:  "rgb("+colorThief.getColor(img).join(',') + ")" } ) );
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( { color:  "rgb("+colorThief.getColor(cover_img).join(',') + ")" } ) );
                 // spine (x+)
                 meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
                 // opposite of spine (pages) (x-)
@@ -162,9 +197,15 @@ function init() {
                 // top (y+)
                 meshMaterialArray.push( new THREE.MeshBasicMaterial( { color: 0xF5F5F5 } ) );
                 // bottom (y-)
-                meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title + '-back.jpg') }) );
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( {
+                  //map: THREE.ImageUtils.loadTexture(book.back_img)
+                  map: back_texture
+                }) );
                 // back (z+)
-                meshMaterialArray.push( new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture('images/books/' +book.title +'-cover.jpg')  }) );
+                meshMaterialArray.push( new THREE.MeshBasicMaterial( {
+                  //map: THREE.ImageUtils.loadTexture(book.cover_img)
+                  map: cover_texture
+                }) );
                 // cover (z-)
                 var material = new THREE.MeshFaceMaterial( meshMaterialArray );
                  // var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
@@ -174,7 +215,7 @@ function init() {
                 //scene is global
                 scene.add(mesh);
             };
-            img.src = 'images/books/' +book.title +'-cover.jpg';
+
           }
         });
     }

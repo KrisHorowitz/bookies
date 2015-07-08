@@ -2,8 +2,8 @@ var util = require('util'),
     OperationHelper = require('apac').OperationHelper;
 
 var opHelper = new OperationHelper({
-    awsId:     process.env.AWS_ID,
-    awsSecret: process.env.AWS_SECRET,
+    awsId:     process.env.AWS_ACCESS_KEY_ID,
+    awsSecret: process.env.AWS_SECRET_ACCESS_KEY,
     assocId:   process.env.AWS_ASSOC,
     // xml2jsOptions: an extra, optional, parameter for if you want to pass additional options for the xml2js module. (see https://github.com/Leonidas-from-XIV/node-xml2js#options)
     version:   '2013-08-01'

@@ -1,5 +1,6 @@
 var Book = require('../models/book')
   , Amazon = require('../services/amazon')
+  , AWS = require('../services/aws')
   , http = require('http')
   , fs = require('fs')
   , async = require('async')
@@ -40,27 +41,33 @@ module.exports = {
          var back_img, front_img;
 
          http.get(book.LargeImage[0].URL[0], function(res){
+            /*
             var imagedata = '';
             res.setEncoding('binary');
-
             res.on('data', function(chunk){
               imagedata += chunk;
             });
             res.on('end', function(){
-              var _path = path.join(__dirname, '../public/images/books/', title + '-cover.jpg');
+            */
+              var _path = title + '-cover.jpg';
               console.log('Saving File To', _path);
-              front_img = '/images/books/' + title + '-cover.jpg';
+              front_img = '//content.kris.life/' + title + '-cover.jpg';
 
-              fs.writeFile(_path, imagedata, 'binary', function(err) {
-                console.log('Cover saved.');
-                if (back_img && front_img) {
-                  cb(null, book, front_img, back_img);
-                }
-              });
+              AWS.upload(_path, res, function(err, data) {
+                  console.log(err, data);
+                  if (err) cb(err);
+                  if (back_img && front_img) {
+                    cb(null, book, front_img, back_img);
+                  }
+                });
+              /*
             });
+*/
           });
 
+
           http.get(book.ImageSets[0].ImageSet[0].LargeImage[0].URL[0], function(res){
+            /*
             var imagedata = '';
             res.setEncoding('binary');
 
@@ -68,17 +75,21 @@ module.exports = {
               imagedata += chunk;
             });
             res.on('end', function(){
-              var _path = path.join(__dirname, '../public/images/books/', title + '-back.jpg');
+            */
+              var _path = title + '-back.jpg';
               console.log('Saving File To', _path);
-              back_img = '/images/books/' + title + '-back.jpg';
+              back_img = '//content.kris.life/' + title + '-back.jpg';
 
-              fs.writeFile(_path, imagedata, 'binary', function(err) {
-                console.log('Back saved.');
-                if (back_img && front_img) {
-                  cb(null, book, front_img, back_img);
-                }
-              });
+              AWS.upload(_path, res, function(err, data) {
+                  console.log(err, data);
+                  if (err) cb(err);
+                  if (back_img && front_img) {
+                    cb(null, book, front_img, back_img);
+                  }
+                });
+              /*
             });
+*/
           });
 
 
@@ -90,15 +101,12 @@ module.exports = {
         var bookDim = [];
         var itemDim = book.ItemAttributes[0].ItemDimensions[0];
         bookDim.push(parseInt(itemDim.Length[0]._, 10), parseInt(itemDim.Width[0]._, 10), parseInt(itemDim.Height[0]._, 10));
-        console.log(itemDim);
         if (itemDim.Length[0].$.Units === 'hundredths-inches') {
-          console.log('this is true');
           for (var i = 0; i < bookDim.length; i++) {
             bookDim[i] = bookDim[i] / 100;
           }
         }
         bookDim = bookDim.sort();
-        console.log(bookDim);
         Book.sync().then(function () {
           var bookObj = {
             title     : book.ItemAttributes[0].Title[0],
