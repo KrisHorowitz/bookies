@@ -173,7 +173,7 @@ function init() {
 
                 var cover_canvas = document.createElement('canvas');
                 var back_canvas  = document.createElement('canvas');
-                document.body.appendChild(cover_canvas);
+                // document.body.appendChild(cover_canvas);
                 cover_canvas.width  = cover_img.width;
                 cover_canvas.height = cover_img.height;
                 back_canvas.width   = back_img.width;
