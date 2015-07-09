@@ -1,7 +1,0 @@
-module.exports = {
-  aws: {
-      id: '[YOUR AWS ID HERE]',
-      secret: '[YOUR AWS SECRET HERE]',
-      assoc: '[YOUR ASSOCIATE TAG HERE]'
-  }
-};

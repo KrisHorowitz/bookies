@@ -257,30 +257,77 @@ function init() {
   // loader.createMaterial(shelf);
   scene.add(shelf);
 
+  /////////////
+  // WALL YZ //
+  /////////////
+
+  //with shelf
+  var wallYZTexture = new THREE.ImageUtils.loadTexture( 'images/wallpaper2.png' );
+  wallYZTexture.wrapS = wallYZTexture.wrapT = THREE.RepeatWrapping;
+  // wallYZTexture.repeat.set( 10, 10 );
+  var wallYZMaterial = new THREE.MeshBasicMaterial( { map: wallYZTexture } );
+  var wallYZGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+  var wallYZ = new THREE.Mesh(wallYZGeometry, wallYZMaterial);
+  wallYZ.rotation.y = Math.PI / 2;
+  scene.add(wallYZ);
+
+  /////////////
+  // WALL XY //
+  /////////////
+
+  //without shelf
+  var wallXYTexture = new THREE.ImageUtils.loadTexture( 'images/wallpaper2.png' );
+  wallXYTexture.wrapS = wallXYTexture.wrapT = THREE.RepeatWrapping;
+  // wallYZTexture.repeat.set( 10, 10 );
+  var wallXYMaterial = new THREE.MeshBasicMaterial( { map: wallXYTexture } );
+  var wallXYGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+  var wallXY = new THREE.Mesh(wallXYGeometry, wallXYMaterial);
+  wallXY.position.x = 50;
+  wallXY.position.z = -50;
+  scene.add(wallXY);
+
+
+
+  ///////////
+  // FLOOR //
+  ///////////
+
+  var floorTexture = new THREE.ImageUtils.loadTexture( 'images/floor.jpg' );
+  // floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+  // floorTexture.repeat.set( 10, 10 );
+  var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+  var floorGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
+  var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+  floor.position.x = 50;
+  floor.rotation.x = Math.PI / 2;
+  floor.position.y = -50;
+
+  scene.add(floor);
+
   //////////
   // GRID //
   //////////
 
-  var axes = new THREE.AxisHelper(50);
-  axes.position = shelf.position;
-  scene.add(axes);
+  // var axes = new THREE.AxisHelper(50);
+  // axes.position = shelf.position;
+  // scene.add(axes);
 
-  var gridXZ = new THREE.GridHelper(100, 10);
-  gridXZ.setColors( new THREE.Color(0x006600), new THREE.Color(0x006600) );
-  gridXZ.position.set( 100,-100,0 );
-  scene.add(gridXZ); //green
+  // var gridXZ = new THREE.GridHelper(100, 10);
+  // gridXZ.setColors( new THREE.Color(0x006600), new THREE.Color(0x006600) );
+  // gridXZ.position.set( 100,-100,0 );
+  // scene.add(gridXZ); //green
 
-  var gridXY = new THREE.GridHelper(100, 10);
-  gridXY.position.set( 100,0,-100 );
-  gridXY.rotation.x = Math.PI/2;
-  gridXY.setColors( new THREE.Color(0x000066), new THREE.Color(0x000066) );
-  scene.add(gridXY); //blue
+  // var gridXY = new THREE.GridHelper(100, 10);
+  // gridXY.position.set( 100,0,-100 );
+  // gridXY.rotation.x = Math.PI/2;
+  // gridXY.setColors( new THREE.Color(0x000066), new THREE.Color(0x000066) );
+  // scene.add(gridXY); //blue
 
-  var gridYZ = new THREE.GridHelper(100, 10);
-  gridYZ.position.set( 0,0,0 );
-  gridYZ.rotation.z = Math.PI/2;
-  gridYZ.setColors( new THREE.Color(0x660000), new THREE.Color(0x660000) );
-  scene.add(gridYZ); //red
+  // var gridYZ = new THREE.GridHelper(100, 10);
+  // gridYZ.position.set( 0,0,0 );
+  // gridYZ.rotation.z = Math.PI/2;
+  // gridYZ.setColors( new THREE.Color(0x660000), new THREE.Color(0x660000) );
+  // scene.add(gridYZ); //red
 
   // direction (normalized), origin, length, color(hex)
   // var origin = new THREE.Vector3(50,100,50);

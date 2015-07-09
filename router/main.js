@@ -21,9 +21,6 @@ module.exports=function(app) {
   app.get('/detail', function(req, res) {
     res.render('detail.html');
   });
-  app.get('/shelf-test', function(req, res) {
-    res.render('shelf-test.html');
-  });
 
   //book
   app.get('/book', controllers.book.index);
