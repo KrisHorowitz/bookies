@@ -257,34 +257,38 @@ function init() {
   // loader.createMaterial(shelf);
   scene.add(shelf);
 
-  /////////////
-  // WALL YZ //
-  /////////////
+  //////////
+  // WALL //
+  //////////
 
-  //with shelf
-  var wallYZTexture = new THREE.ImageUtils.loadTexture( 'images/wallpaper2.png' );
-  wallYZTexture.wrapS = wallYZTexture.wrapT = THREE.RepeatWrapping;
+  var wallTexture = new THREE.ImageUtils.loadTexture( 'images/wallpaper2.png' );
+  wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+  var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture } );
+  var wallGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
   // wallYZTexture.repeat.set( 10, 10 );
-  var wallYZMaterial = new THREE.MeshBasicMaterial( { map: wallYZTexture } );
-  var wallYZGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-  var wallYZ = new THREE.Mesh(wallYZGeometry, wallYZMaterial);
+
+  //YZ wall with shelf
+
+  var wallYZ = new THREE.Mesh(wallGeometry, wallMaterial);
   wallYZ.rotation.y = Math.PI / 2;
   scene.add(wallYZ);
 
-  /////////////
-  // WALL XY //
-  /////////////
+  //XY wall without shelf (right)
 
-  //without shelf
-  var wallXYTexture = new THREE.ImageUtils.loadTexture( 'images/wallpaper2.png' );
-  wallXYTexture.wrapS = wallXYTexture.wrapT = THREE.RepeatWrapping;
   // wallYZTexture.repeat.set( 10, 10 );
-  var wallXYMaterial = new THREE.MeshBasicMaterial( { map: wallXYTexture } );
-  var wallXYGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-  var wallXY = new THREE.Mesh(wallXYGeometry, wallXYMaterial);
-  wallXY.position.x = 50;
-  wallXY.position.z = -50;
-  scene.add(wallXY);
+  var wallXYNeg = new THREE.Mesh(wallGeometry, wallMaterial);
+  wallXYNeg.position.x = 50;
+  wallXYNeg.position.z = -50;
+  scene.add(wallXYNeg);
+
+  //XY without shelf (left)
+
+  // wallYZTexture.repeat.set( 10, 10 );
+  var wallXYPos = new THREE.Mesh(wallGeometry, wallMaterial);
+  wallXYPos.position.x = 50;
+  wallXYPos.position.z = 50;
+  wallXYPos.rotation.y = Math.PI;
+  scene.add(wallXYPos);
 
 
 
